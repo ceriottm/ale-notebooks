@@ -1,0 +1,8 @@
+numpy
+metatensor
+git+https://github.com/Luthaf/rascaline.git
+skmatter
+chemiscope
+scikit-learn
+wigners
+scipy
