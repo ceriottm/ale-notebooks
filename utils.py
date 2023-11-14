@@ -322,3 +322,24 @@ def _complex_clebsch_gordan_matrix(l1, l2, L):
         return np.zeros((2 * l1 + 1, 2 * l2 + 1, 2 * L + 1), dtype=np.double)
     else:
         return wigners.clebsch_gordan_array(l1, l2, L)
+
+def _real_clebsch_gordan_matrix(l1, l2, L):
+    complex_cg = _complex_clebsch_gordan_matrix(l1, l2, L)
+    
+    real_cg = (_real2complex(l1).T @ complex_cg.reshape(2 * l1 + 1, -1)).reshape(
+                        complex_cg.shape
+                    )
+
+    real_cg = real_cg.swapaxes(0, 1)
+    real_cg = (_real2complex(l2).T @ real_cg.reshape(2 * l2 + 1, -1)).reshape(
+        real_cg.shape
+    )
+    real_cg = real_cg.swapaxes(0, 1)
+    real_cg = real_cg @ np.conjugate(_real2complex(L))
+
+    if (l1 + l2 + L) % 2 == 0:
+        rcg = np.real(real_cg)
+    else:
+        rcg = np.imag(real_cg)
+        
+    return rcg
